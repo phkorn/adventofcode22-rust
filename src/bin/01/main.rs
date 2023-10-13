@@ -17,6 +17,7 @@ fn main() ->  Result<()> {
             },
             x => sum += x.parse::<u32>().unwrap()
         }
+        Ok(())
     })?;
     // 1
     let max_value = vector.iter().copied().max();
