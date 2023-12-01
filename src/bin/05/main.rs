@@ -43,9 +43,7 @@ fn handle_move(vectors: &mut Stacks, mov: &Move) {
         slice = x.collect_vec();
     }
     let v_to: &mut Vec<Option<char>> = vectors[mov.to - 1].as_mut();
-    slice.iter().rev().for_each(|elem| {
-        v_to.push(*elem);
-    });
+    v_to.extend(slice.iter().rev())
 }
 
 fn handle_move_multiple(vectors: &mut Stacks, mov: &Move) {
@@ -61,9 +59,7 @@ fn handle_move_multiple(vectors: &mut Stacks, mov: &Move) {
         slice = x.collect_vec();
     }
     let v_to: &mut Vec<Option<char>> = vectors[mov.to - 1].as_mut();
-    slice.iter().for_each(|elem| {
-        v_to.push(*elem);
-    });
+    v_to.extend(slice.iter())
 }
 
 fn move_cargo(mut move_fn: impl FnMut(&mut Stacks, &Move) -> ()) -> Result<()> {
@@ -79,7 +75,7 @@ fn move_cargo(mut move_fn: impl FnMut(&mut Stacks, &Move) -> ()) -> Result<()> {
             x if regex_stack.is_match(x) => {
                 let iter = regex_stack.captures_iter(x);
                 for (idx, mat) in iter.enumerate() {
-                    println!("{:?}", mat);
+                    // println!("{:?}", mat);
                     match (mat.get(1), mat.get(2)) {
                         (Some(cargo), None) => {
                             add_to_vecs(&mut vectors, idx, cargo.as_str().chars().next())
@@ -112,7 +108,7 @@ fn move_cargo(mut move_fn: impl FnMut(&mut Stacks, &Move) -> ()) -> Result<()> {
     print_vectors(&vectors);
     for mov in moves {
         move_fn(&mut vectors, &mov);
-        print_vectors(&vectors);
+        // print_vectors(&vectors);
     }
 
     for v in vectors {
@@ -132,8 +128,6 @@ fn second() -> Result<()> {
     move_cargo(handle_move_multiple)?;
     Ok(())
 }
-
-
 
 fn main() -> Result<()> {
     println!("##### first ####");
